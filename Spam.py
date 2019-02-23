@@ -29,9 +29,9 @@ def extract_header(fname,flag):
     #print(email_body)
     dt = extract_date(text)
     if flag:
-        l1.append('Spam')
+        l1.append(flag)
     else:
-        l1.append('Ham')
+        l1.append(flag)
     l1.append(dt.year)
     l1.append(dt.month)
     l1.append(dt.day)
@@ -179,10 +179,7 @@ def extract_header(fname,flag):
             l1.append(0)
 
     e = email.parser.Parser().parsestr(text)
-    if e['x-mailer']!=None:
-        l1.append(e['x-mailer'])
-    else:
-        l1.append("")
+
     ct = e['content-type']
     if ct!=None:
         op = re.search(r'text',ct)
@@ -209,22 +206,12 @@ def extract_header(fname,flag):
         for j in range(0,3):
             l1.append(0)
 
-    with open("E:\\SpamDetection\\headerfeatures.csv", 'a') as csv_file:
+    with open("E:\\SpamDetection\\headerfeatures1.csv", 'a') as csv_file:
         filewriter = csv.writer(csv_file, delimiter=',',quotechar='"', quoting=csv.QUOTE_MINIMAL,lineterminator='\n')
 
         filewriter.writerow(l1)
 
-    '''for i in e :
-        print(i)'''
-    '''if email_body.is_multipart():
-        for payload in email_body.get_payload():
-            # if payload.is_multipart(): ...
-            text_without_html = BeautifulSoup(payload.get_payload()).get_text
-            print(text_without_html)
-    else:
-        text_without_html = BeautifulSoup(email_body.get_payload()).get_text()
-        print(text_without_html)
-       # print(email_body.get_payload())'''
+
 
 
 def maxRepeating(str):
@@ -250,9 +237,9 @@ def extract_subject(fname,flag):
     filename = open(fname,encoding='Latin-1')
     text = filename.read()
     if flag:
-        l1.append('Spam')
+        l1.append(flag)
     else:
-        l1.append('Ham')
+        l1.append(flag)
     e = email.parser.Parser().parsestr(text)
     l1.append(len(e['subject']))
     print(e['Subject'])
@@ -355,23 +342,23 @@ def extract_subject(fname,flag):
     print(minchardiv)
     l1.append(minchardiv)
 
-    with open("E:\\SpamDetection\\subjectfeatures.csv", 'a') as csv_file:
+    with open("E:\\SpamDetection\\subjectfeatures1.csv", 'a') as csv_file:
         filewriter = csv.writer(csv_file, delimiter=',',quotechar='"', quoting=csv.QUOTE_MINIMAL,lineterminator='\n')
 
         filewriter.writerow(l1)
 
-path = 'E:\\SpamDetection\\ham_train'
-with open("E:\\SpamDetection\\headerfeatures.csv", 'w') as csv_file:
+path = 'E:\\SpamDetection\\ham_test'
+with open("E:\\SpamDetection\\headerfeatures1.csv", 'w') as csv_file:
     filewriter = csv.writer(csv_file, delimiter=',',quotechar='"', quoting=csv.QUOTE_MINIMAL,lineterminator='\n')
 
-    filewriter.writerow(['Class','Year', 'Month', 'Day', 'Hour', 'Minute', 'Second','From Google?','From AOL?','From Gov?','From MIL?','From Yahoo','From example?','To hotmail?','To aol?','To MSN?','To localhost?','To yahoo?','To example?','To google?','To gov?','To mil?','Count of TO Mails','Reply to Google','Reply to Hotmail','Reply to MIL','Reply to Yahoo','Reply to AOL','Reply to Gov','X-Mailman Server','Is Text?','Is Multipart/Mixed?','Is Multipart/Alternative?'])
+    filewriter.writerow(['Class','Year', 'Month', 'Day', 'Hour', 'Minute', 'Second','From Google?','From AOL?','From Gov?','From MIL?','From Yahoo','From example?','To hotmail?','To aol?','To MSN?','To localhost?','To yahoo?','To example?','To google?','To gov?','To mil?','Count of TO Mails','Reply to Google','Reply to Hotmail','Reply to MIL','Reply to Yahoo','Reply to AOL','Reply to Gov','Is Text?','Is Multipart/Mixed?','Is Multipart/Alternative?'])
 i = 0
 for filename in os.listdir(path):
     i = i+1
     print(i)
     extract_header(path+"\\"+filename,0)
 
-path = 'E:\\SpamDetection\\spam_train'
+path = 'E:\\SpamDetection\\spam_test'
 i = 0
 for filename in os.listdir(path):
     i = i+1
@@ -379,8 +366,8 @@ for filename in os.listdir(path):
     extract_header(path+"\\"+filename,1)
 
 
-path = 'E:\\SpamDetection\\ham_train'
-with open("E:\\SpamDetection\\subjectfeatures.csv", 'w') as csv_file:
+path = 'E:\\SpamDetection\\ham_test'
+with open("E:\\SpamDetection\\subjectfeatures1.csv", 'w') as csv_file:
     filewriter = csv.writer(csv_file, delimiter=',',quotechar='"', quoting=csv.QUOTE_MINIMAL,lineterminator='\n')
 
     filewriter.writerow(['Class','no of chars','No of capitalised words','No of words with all caps','Single digits','more than one Digits','single letters','only letters','letters and numbers','single chars','Ratio to upper to lower chars','Ratio of upper to all chars','Ratio of Digits to all chars','Ration of non alphanumeric to all chars','Count of max repeating char','max of character lengths','minimum char diversity'])
@@ -390,7 +377,7 @@ for filename in os.listdir(path):
     print(i)
     extract_subject(path+"\\"+filename,0)
 
-path = 'E:\\SpamDetection\\spam_train'
+path = 'E:\\SpamDetection\\spam_test'
 i = 0
 for filename in os.listdir(path):
     i = i+1
